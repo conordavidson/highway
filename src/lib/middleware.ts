@@ -1,31 +1,62 @@
 import * as Express from 'express';
 import * as Db from 'lib/db';
 import * as Types from 'lib/types';
+import * as Errors from 'lib/errors';
 
-const bearerTokenRegex = /Bearer\s[\d|a-f]{8}-[\d|a-f]{4}-[\d|a-f]{4}-[\d|a-f]{4}-[\d|a-f]{12}/;
+const bearerTokenRegex = /Bearer\s([\d|a-f]{8}-[\d|a-f]{4}-[\d|a-f]{4}-[\d|a-f]{4}-[\d|a-f]{12})/;
 
-export const authenticated: Express.RequestHandler = async (req, res, next) => {
+export const initContext: Express.RequestHandler = (req, _res, next) => {
+  req.context = {
+    currentUser: null,
+  };
+  next();
+};
+
+export const authenticate: Express.RequestHandler = async (req, _res, next) => {
   const authHeader = req.headers['authorization'] as string;
-  if (!authHeader) return res.status(401).json({ error: 'Authorization header required' });
+  if (!authHeader) throw Errors.Unathorized.new(`Authorization header required`);
 
   const match = authHeader.match(bearerTokenRegex);
-
   if (!match)
-    return res
-      .status(401)
-      .json({ error: `Authorization header must conform to Bearer {{ Auth Token }} format` });
+    throw Errors.Unathorized.new(
+      `Authorization header must conform to Bearer {{ Auth Token }} format`,
+    );
 
   const token = match[1];
-
   const authToken = await Db.client.authToken.findFirst({
     where: { token, revokedAt: null },
     include: { user: true },
   });
+  if (!authToken) throw Errors.Unathorized.new(`Invalid API token`);
 
-  if (!authToken) return res.status(401).json({ error: `Invalid Bearer token` });
-
-  // @ts-ignore
-  req.currentUser = authToken.user;
+  req.context.currentUser = authToken.user;
 
   next();
+};
+
+export const handleErrors: Express.ErrorRequestHandler = (
+  error: Types.ApiError,
+  _req,
+  res,
+  _next,
+) => {
+  switch (error.type) {
+    case 'invalid_request':
+      return res.status(error.statusCode).json({
+        type: error.type,
+        message: 'Request parameters are invalid.',
+        params: error.params,
+      });
+    case 'unauthorized':
+      return res.status(error.statusCode).json({
+        type: error.type,
+        message: error.message,
+      });
+    default:
+      console.log('[API ERROR]', error);
+      return res.status(500).json({
+        name: 'api_error',
+        message: 'Server error. Our team has been notified. Please try again.',
+      });
+  }
 };

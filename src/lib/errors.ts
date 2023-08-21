@@ -1,15 +1,10 @@
 import * as Zod from 'zod';
+import * as Types from 'lib/types';
 
-type ValidationError = {
-  name: 'ValidationError';
-  statusCode: 400;
-  params: object;
-};
-
-export const Validation = {
-  new(params: object): ValidationError {
+export const InvalidRequest = {
+  new(params: object): Types.InvalidRequestError {
     return {
-      name: 'ValidationError',
+      type: 'invalid_request',
       statusCode: 400,
       params,
     };
@@ -19,6 +14,27 @@ export const Validation = {
       path: issue.path[0],
       message: issue.message,
     }));
-    return Validation.new(formatted);
+    return InvalidRequest.new(formatted);
+  },
+};
+
+export const Unathorized = {
+  new(message?: string): Types.UnauthorizedError {
+    return {
+      type: 'unauthorized',
+      statusCode: 401,
+      message: message || 'No valid API token provided',
+    };
+  },
+};
+
+export const ServerError = {
+  new(message: string, meta?: object): Types.ServerError {
+    console.log('❗️ Server Error', message, meta);
+    return {
+      type: 'server_error',
+      statusCode: 500,
+      message,
+    };
   },
 };

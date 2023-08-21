@@ -38,7 +38,7 @@ model Comment {
 model User {
   id          String      @id @default(uuid())
   phone       String      @unique
-  displayName String      @unique @map("display_name")
+  displayName String?     @unique @map("display_name")
   comments    Comment[]
   authTokens  AuthToken[]
   createdAt   DateTime    @default(now()) @map("created_at")

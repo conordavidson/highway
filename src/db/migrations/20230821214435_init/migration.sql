@@ -24,7 +24,7 @@ CREATE TABLE "comments" (
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
-    "display_name" TEXT NOT NULL,
+    "display_name" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
