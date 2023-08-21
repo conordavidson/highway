@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Plate {
+  id        String    @id @default(uuid())
+  value     String    @unique
+  comments  Comment[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("plates")
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  parentId  String    @map("parent_id")
+  parent    Comment?  @relation("CommentTree", fields: [parentId], references: [id])
+  children  Comment[] @relation("CommentTree")
+  userId    String    @map("user_id")
+  user      User      @relation(fields: [userId], references: [id])
+  plateId   String    @map("plate_id")
+  plate     Plate     @relation(fields: [plateId], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("comments")
+}
+
+model User {
+  id          String      @id @default(uuid())
+  phone       String      @unique
+  displayName String      @unique @map("display_name")
+  comments    Comment[]
+  authTokens  AuthToken[]
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model AuthToken {
+  id        String    @id @default(uuid())
+  token     String    @default(uuid())
+  userId    String    @map("user_id")
+  user      User      @relation(fields: [userId], references: [id])
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("auth_tokens")
+}

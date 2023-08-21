@@ -1,0 +1,31 @@
+{
+  "name": "highway",
+  "version": "0.0.1",
+  "description": "Honk Server",
+  "main": "index.js",
+  "author": "Conor Davidson",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"tsc --watch\" \"NODE_PATH=dist/ nodemon -q dist/index.js\"",
+    "migrate": "prisma migrate dev --schema src/db/schema.prisma",
+    "db:pull": "prisma db pull --schema src/db/schema.prisma",
+    "db:seed": "tsc && NODE_PATH=dist/ node dist/db/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@prisma/client": "5.1.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "zod": "^3.22.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.1",
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.1",
+    "prisma": "^5.1.1",
+    "typescript": "^5.1.6"
+  }
+}
