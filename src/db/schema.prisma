@@ -11,13 +11,26 @@ datasource db {
 }
 
 model Plate {
-  id        String    @id @default(uuid())
-  value     String    @unique
+  id      String @id @default(uuid())
+  value   String @unique
+  stateId String @map("state_id")
+
   comments  Comment[]
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
   @@map("plates")
+}
+
+model State {
+  id           String @id @default(uuid())
+  name         String @unique
+  abbreviation String @unique
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("states")
 }
 
 model Comment {

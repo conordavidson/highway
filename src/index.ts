@@ -6,6 +6,7 @@ import * as Middleware from 'lib/middleware';
 import * as CurrentUser from 'controllers/currentUser';
 import * as AuthTokens from 'controllers/authTokens';
 import * as SmsVerifications from 'controllers/smsVerifications';
+import * as States from 'controllers/states';
 
 const app = Express.default();
 
@@ -19,6 +20,7 @@ app.get('/', (_req, res) => {
 app.put('/current-user', authenticatedMiddleware, CurrentUser.update);
 app.post('/auth-tokens', baseMiddleware, AuthTokens.create);
 app.post('/sms-verifications', baseMiddleware, SmsVerifications.create);
+app.get('/states', baseMiddleware, States.index)
 
 app.use(Middleware.handleErrors);
 

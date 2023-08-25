@@ -2,10 +2,22 @@
 CREATE TABLE "plates" (
     "id" TEXT NOT NULL,
     "value" TEXT NOT NULL,
+    "state_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "plates_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "states" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "abbreviation" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "states_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -47,6 +59,12 @@ CREATE TABLE "auth_tokens" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "plates_value_key" ON "plates"("value");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "states_name_key" ON "states"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "states_abbreviation_key" ON "states"("abbreviation");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_phone_key" ON "users"("phone");

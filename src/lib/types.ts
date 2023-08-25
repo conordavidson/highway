@@ -2,6 +2,7 @@ import * as Models from '@prisma/client';
 
 export type User = Models.User;
 export type Comment = Models.Comment;
+export type Plate = Models.Plate;
 
 type RequestContext = {
   currentUser: null | User;
