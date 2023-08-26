@@ -1,7 +1,7 @@
-import * as Express from 'express';
-import * as Errors from 'lib/errors';
-import * as Types from 'lib/types';
 import * as Db from 'lib/db';
+import * as Errors from 'lib/errors';
+import * as Express from 'express';
+import * as Types from 'lib/types';
 
 export const ensureUser = (req: Express.Request) => {
   if (req.context.currentUser === null)

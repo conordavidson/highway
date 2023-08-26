@@ -1,6 +1,6 @@
-import * as Twilio from 'twilio';
 import * as Config from 'lib/config';
 import * as Errors from 'lib/errors';
+import * as Twilio from 'twilio';
 
 export const client = Twilio.default(Config.TWILIO_ACCOUNT_SID, Config.TWILIO_AUTH_TOKEN);
 

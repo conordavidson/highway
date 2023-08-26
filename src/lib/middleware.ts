@@ -1,11 +1,12 @@
-import * as Express from 'express';
 import * as Db from 'lib/db';
-import * as Types from 'lib/types';
 import * as Errors from 'lib/errors';
+import * as Express from 'express';
+import * as Types from 'lib/types';
 
 const bearerTokenRegex = /Bearer\s([\d|a-f]{8}-[\d|a-f]{4}-[\d|a-f]{4}-[\d|a-f]{4}-[\d|a-f]{12})/;
 
 export const initContext: Express.RequestHandler = (req, _res, next) => {
+  // eslint-disable-next-line fp/no-mutation
   req.context = {
     currentUser: null,
   };
@@ -29,17 +30,13 @@ export const authenticate: Express.RequestHandler = async (req, _res, next) => {
   });
   if (!authToken) throw Errors.Unathorized.new(`Invalid API token`);
 
+  // eslint-disable-next-line fp/no-mutation
   req.context.currentUser = authToken.user;
 
   next();
 };
 
-export const handleErrors: Express.ErrorRequestHandler = (
-  error: Types.ApiError,
-  _req,
-  res,
-  _next,
-) => {
+export const handleErrors: Express.ErrorRequestHandler = (error: Types.ApiError, _req, res) => {
   switch (error.type) {
     case 'invalid_request':
       return res.status(error.statusCode).json({

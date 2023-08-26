@@ -1,5 +1,5 @@
-import * as Errors from 'lib/errors';
 import * as Db from 'lib/db';
+import * as Errors from 'lib/errors';
 import * as Types from 'lib/types';
 
 type FindOrCreatePlate = {

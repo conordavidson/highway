@@ -1,3 +1,5 @@
+/* eslint-disable fp/no-mutation */
+/* eslint-disable fp/no-mutating-methods */
 type Node = {
   id: string;
   parentId: null | string;
