@@ -12,13 +12,15 @@ datasource db {
 
 model Plate {
   id      String @id @default(uuid())
-  value   String @unique
+  value   String
   stateId String @map("state_id")
+  state   State  @relation(fields: [stateId], references: [id])
 
   comments  Comment[]
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
+  @@unique([value, stateId])
   @@map("plates")
 }
 
@@ -29,6 +31,7 @@ model State {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  plates    Plate[]
 
   @@map("states")
 }

@@ -4,7 +4,9 @@ import * as Types from 'lib/types';
 
 type FindOrCreatePlate = {
   status: 'found' | 'created';
-  plate: Types.Plate;
+  plate: Types.Plate & {
+    comments: Types.Comment[];
+  };
 };
 
 export const findOrCreate = async (
@@ -23,7 +25,13 @@ export const findOrCreate = async (
       stateId,
       value: capitalized,
     },
+    include: {
+      comments: true,
+      state: true,
+    },
   });
+
+  console.log('found', found);
 
   if (found)
     return {
@@ -35,6 +43,10 @@ export const findOrCreate = async (
     data: {
       stateId,
       value: capitalized,
+    },
+    include: {
+      comments: true,
+      state: true,
     },
   });
 

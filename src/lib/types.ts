@@ -18,7 +18,7 @@ declare global {
   }
 }
 
-export type ApiError = InvalidRequestError | UnauthorizedError | ServerError;
+export type ApiError = InvalidRequestError | UnauthorizedError | NotFoundError | ServerError;
 
 export type InvalidRequestError = {
   type: 'invalid_request';
@@ -29,6 +29,12 @@ export type InvalidRequestError = {
 export type UnauthorizedError = {
   type: 'unauthorized';
   statusCode: 401;
+  message: string;
+};
+
+export type NotFoundError = {
+  type: 'not_found';
+  statusCode: 404;
   message: string;
 };
 

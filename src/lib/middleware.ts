@@ -49,6 +49,11 @@ export const handleErrors: Express.ErrorRequestHandler = (error: Types.ApiError,
         type: error.type,
         message: error.message,
       });
+    case 'not_found':
+      return res.status(error.statusCode).json({
+        type: error.type,
+        message: error.message,
+      });
     default:
       console.log('[API ERROR]', error);
       return res.status(500).json({

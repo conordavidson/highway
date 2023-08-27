@@ -28,6 +28,16 @@ export const Unathorized = {
   },
 };
 
+export const NotFound = {
+  new(resource: string): Types.NotFoundError {
+    return {
+      type: 'not_found',
+      statusCode: 404,
+      message: `${resource} not found`,
+    };
+  },
+};
+
 export const ServerError = {
   new(message: string, meta?: object): Types.ServerError {
     console.log('❗️ Server Error', message, meta);

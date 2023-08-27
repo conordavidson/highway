@@ -58,7 +58,7 @@ CREATE TABLE "auth_tokens" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "plates_value_key" ON "plates"("value");
+CREATE UNIQUE INDEX "plates_value_state_id_key" ON "plates"("value", "state_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "states_name_key" ON "states"("name");
@@ -71,6 +71,9 @@ CREATE UNIQUE INDEX "users_phone_key" ON "users"("phone");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_display_name_key" ON "users"("display_name");
+
+-- AddForeignKey
+ALTER TABLE "plates" ADD CONSTRAINT "plates_state_id_fkey" FOREIGN KEY ("state_id") REFERENCES "states"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "comments" ADD CONSTRAINT "comments_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "comments"("id") ON DELETE SET NULL ON UPDATE CASCADE;
